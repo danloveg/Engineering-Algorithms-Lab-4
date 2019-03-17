@@ -1,3 +1,5 @@
+package rsa;
+
 /*******************************************************************************
  *
  * FileEncryptor.java
@@ -23,7 +25,6 @@ import java.util.Base64;
 public class FileEncryptor {
 
     public static void main(String[] args) {
-        Base64.Encoder encoder = Base64.getEncoder();
         int KEY_SIZE = 128;
         int CERTAINTY = 20;
         File file;
@@ -82,6 +83,7 @@ public class FileEncryptor {
         // Encrypt the message
         // ---------------------------------------------------------------------
         start = System.currentTimeMillis();
+        Base64.Encoder encoder = Base64.getEncoder();
         byte[] fileContentsAsBytes = fileContents.getBytes();
         BigInteger fileContentsAsBigInt = new BigInteger(fileContentsAsBytes);
         BigInteger encrypted = fileContentsAsBigInt.modPow(e, n);
@@ -123,7 +125,7 @@ public class FileEncryptor {
         }
     }
 
-    /**
+    /*
      * Get a valid file from the command line arguments.
      */
     public static File getFile(String[] args) throws RuntimeException {
@@ -146,14 +148,15 @@ public class FileEncryptor {
         return file;
     }
 
-    /**
+    /*
      * Return contents of file
      */
     public static String readFileContents(File file) throws IOException {
-        FileInputStream inputStream = new FileInputStream(file);
-        byte[] data = new byte[(int) file.length()];
-        inputStream.read(data);
-        inputStream.close();
+        byte[] data;
+        try (FileInputStream inputStream = new FileInputStream(file)) {
+            data = new byte[(int) file.length()];
+            inputStream.read(data);
+        }
 
         return new String(data, "UTF-8");
     }
