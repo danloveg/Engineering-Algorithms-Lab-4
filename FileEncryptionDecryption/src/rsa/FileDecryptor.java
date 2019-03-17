@@ -105,10 +105,6 @@ public class FileDecryptor {
             throw new RuntimeException(String.format("ERROR: %s is not a valid file.", filename));
         }
 
-        if (file.length() > 245) {
-            throw new RuntimeException(String.format("ERROR: File is too big. RSA is inefficient for files with size greater than 245 bytes."));
-        }
-
         return file;
     }
 
