@@ -1,0 +1,6 @@
+# Visual Studio Code folder
+*/.vscode/
+
+# Java Class files
+*.class
+
