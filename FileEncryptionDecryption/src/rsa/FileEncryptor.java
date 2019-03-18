@@ -32,7 +32,7 @@ public class FileEncryptor {
 
         // Get a file from the command line arguments
         try {
-            file = getFile(args);
+            file = getFile(args, KEY_SIZE);
         } catch (RuntimeException e) {
             System.out.println(e.getMessage());
             return;
@@ -128,7 +128,7 @@ public class FileEncryptor {
     /*
      * Get a valid file from the command line arguments.
      */
-    public static File getFile(String[] args) throws RuntimeException {
+    public static File getFile(String[] args, int KEY_SIZE) throws RuntimeException {
         if (args.length != 1) {
             throw new RuntimeException("ERROR: Must supply an argument for a file name.");
         }
@@ -141,8 +141,9 @@ public class FileEncryptor {
             throw new RuntimeException(String.format("ERROR: %s is not a valid file.", filename));
         }
 
-        if (file.length() > 245) {
-            throw new RuntimeException(String.format("ERROR: File is too big. RSA is inefficient for files with size greater than 245 bytes."));
+        int maxLength = (KEY_SIZE / 8); // File cannot be greater than modulus
+        if (file.length() > maxLength) {
+            throw new RuntimeException(String.format("ERROR: File is too big. Max # of bytes for KEY_SIZE %d is %d", KEY_SIZE, maxLength));
         }
 
         return file;
